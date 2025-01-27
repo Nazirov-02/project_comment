@@ -73,8 +73,21 @@
                 <div class="col-1">
                     <a class="btn btn-outline-dark mt-auto" href="#"> Like </a>
                 </div>
-
+           {% if user.is_authenticated %}
             </div>
+             <div class="container mt-5">
+              <div class="text-left" style="margin-top: 10px">
+                <h3>Mahsulot qo'shish</h3>
+              </div>
+                 <div class="row">
+                   <div class="col-1">
+                     <a class="btn btn-outline-success mt-auto" href="{% url 'add_product' %}"> qo'shish </a>
+                   </div>
+                 </div>
+             </div>
+           {% endif %}
+
+
         </div>
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">

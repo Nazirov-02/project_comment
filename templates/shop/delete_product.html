@@ -1,0 +1,10 @@
+<h1>Delete Product</h1>
+<p>Rosdan ham "{{ product.name }}" o'chirilsinmi ?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" style="text-decoration: none; padding: 5px; background-color: #0a53be;
+color:white; border-radius: 5px;">Ha o'chirish</button>
+</form>
+<a href="{% url 'home' %}" style="text-decoration: none; padding: 5px; background-color: #0a53be;
+color:white; border-radius: 5px;">
+    Bekor qilish</a>

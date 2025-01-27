@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mahsulotlarni boshqarish</title>
+    <style>
+        .header{
+            max-width:1000px;
+            margin: auto;
+            border-radius: 10px;
+            background-color: chartreuse;
+            color: #6f42c1;
+            margin-top: 100px;
+        }
+        .form{
+            background-color: chartreuse;
+            border-radius: 10px;
+        }
+        .text{
+            text-align: center;
+            vertical-align: bottom;
+        }
+        body {
+            background-color: #ffc107;
+        }
+        .button{
+            padding:15px 30px;
+            margin-left: 400px;
+            background-color: seagreen;
+            border-radius: 5px;
+        }
+        .button1{
+            padding:15px 30px;
+            margin-left: 15px;
+            background-color: seagreen;
+            border-radius: 5px;
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1 class="text">Mahsulot {{ action }}</h1>
+    <hr>
+{% if action == "O'zgartirish" %}
+   <form class="form" method="post" enctype="multipart/form-data" action="{% url 'edit_product' product.id %}">
+{% else %}
+       <form class="form" method="post" enctype="multipart/form-data" action="{% url 'add_product' %}">
+{% endif %}
+    {{ form.as_p }}
+    {% csrf_token %}
+    <button type="submit" class="button">{{ action }}</button>
+    <a href="{% url 'home' %}" class="button1">Chiqish</a>
+</form>
+</div>
+</body>
+</html>
