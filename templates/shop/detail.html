@@ -51,13 +51,10 @@
                 <div class="row gx-4 gx-lg-5 align-items-center">
                     <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ product.img_url}}" alt="..." /></div>
                     <div class="col-md-6">
-                 {% if user.is_authenticated %}
                     <div style="display:flex; gap: 10px;">
                         <button type="submit" class="btn btn-danger" style="margin-bottom:10px;"><a href="{% url 'delete_product' product.id %}" style="text-decoration:none;color: white;">O'chirish</a></button>
                         <button type="submit" class="btn btn-warning" style="margin-bottom:10px;"><a href="{% url 'edit_product' product.id %}" style="text-decoration:none;color: white;">O'zgartirish</a></button>
                     </div>
-                 {% endif %}
-
                         <div class="small mb-1">Qolgan: {{ product.quantity }} </div>
                         <h1 class="display-5 fw-bolder">{{ product.name }}</h1>
                         <div class="fs-5 mb-5">
@@ -110,16 +107,18 @@
             <div class="row">
                 <div class="col-12">
                     <div class="text-center">
-                        <h2>So'ngi sharxlar</h2>
+                        <h2>So'ngi sharxlar({{ positive }})</h2>
                     </div>
                     {% if comments %}
                      {% for comment in comments %}
+                      {% if comment.is_negative is False %}
                       <div class="media card p-4 mt-2">
                         <div class="media-body">
                           <h3 class="mt-0">{{ comment.name }}</h3>
                             {{ comment.comment }}
                         </div>
                       </div>
+                         {% endif %}
                      {% endfor %}
                     {% else %}
                         <h3 class="mt-0">Hali sharxlar mavjud emas</h3>

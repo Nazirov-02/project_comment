@@ -62,6 +62,10 @@ class Comment(BaseModel):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     comment = models.TextField()
+    is_negative = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.name}, {self.email}, {self.product.name}'
+        return self.product.name if self.product else "No Product"
+
+    class Meta:
+        ordering = ['-created_at']

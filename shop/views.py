@@ -15,8 +15,9 @@ def index(request,category_id = None):
 
 def detail(request,id):
     product = Product.objects.get(id=id)
+    positive = Comment.objects.filter(product=product, is_negative=False).count()
     comments = Comment.objects.filter(product_id=id)
-    return render(request,'shop/detail.html',{'product':product,'comments':comments})
+    return render(request,'shop/detail.html',{'product':product,'comments':comments,'positive': positive,})
 
 
 
@@ -66,7 +67,6 @@ def order_detail(request, pk):
     return render(request, 'shop/detail.html', context)
 
 
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from .models import Product, Comment
 from .forms import CommentForm
@@ -74,7 +74,6 @@ from .forms import CommentForm
 
 def comment_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
-
     if request.method == 'GET':
         form = CommentForm(request.GET)
         if form.is_valid():
@@ -93,7 +92,7 @@ def comment_detail(request, pk):
     else:
         form = CommentForm()
     context = {
-        'comments': Comment.objects.filter(product=product),
+        'comments': Comment.objects.filter(product=product,is_negative=False),
         'form': form,
         'product': product,
     }
@@ -116,28 +115,27 @@ def add_product(request):
 
 
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import ProductModelForm  # Formani to'g'ri import qilganingizga ishonch hosil qiling
+from .forms import ProductModelForm
 from .models import Product
 
 
 def edit_product(request, pk):
-    product = Product.objects.get(id=pk)  # Tahrir qilinadigan mahsulotni olish
+    product = Product.objects.get(id=pk)
     if request.method == "POST":
-        # Formani POST so'rovi bilan, mahsulot instansiyasi bilan yaratish
+
         form = ProductModelForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
-            form.save()  # Mahsulotni tahrirlash va saqlash
-            return redirect('home')  # Tahrirlangan mahsulot sahifasiga yo'naltirish
+            form.save()
+            return redirect('home')
     else:
-        # GET so'rovi uchun formani mahsulot bilan oldindan yaratish
         form = ProductModelForm(instance=product)
 
     context = {
         'form': form,
         'product': product,
-        'action': "O'zgartirish",  # Tahrirlash uchun action
+        'action': "O'zgartirish",
     }
-    return render(request, 'shop/add_product.html', context)
+    return render(request, 'shop/edit_product.html', context)
 
 
 def delete_product(request, pk):
