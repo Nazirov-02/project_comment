@@ -6,18 +6,37 @@ from shop.models import Product, Category, Order, Comment
 
 # Create your views here.
 def index(request,category_id = None):
+    search_query = request.GET.get('q','')
+    filter = request.GET.get('filter','')
     categories = Category.objects.all()
     if category_id:
-        products = Product.objects.filter(category_id=category_id)
+        if filter == 'expensive':
+            products = Product.objects.filter(category_id=category_id).order_by('-price')[:5]
+        elif filter == 'cheap':
+            products = Product.objects.filter(category_id=category_id).order_by('price')[:5]
+        elif filter == 'rating':
+            products = Product.objects.filter(category_id=category_id,rating__gte=4).order_by('-rating')[:5]
+        else:
+            products = Product.objects.filter(category_id=category_id)
     else:
-       products = Product.objects.all()
+        if filter == 'expensive':
+            products = Product.objects.all().order_by('-price')[:5]
+        elif filter == 'cheap':
+            products = Product.objects.all().order_by('price')[:5]
+        elif filter == 'rating':
+            products = Product.objects.filter(rating__gte=4).order_by('-rating')[:5]
+        else:
+            products = Product.objects.all()
+    if search_query:
+        products = Product.objects.filter(name__icontains=search_query,category_id=category_id)
     return render(request,'shop/home.html',{'products':products,'categories':categories})
 
 def detail(request,id):
     product = Product.objects.get(id=id)
     positive = Comment.objects.filter(product=product, is_negative=False).count()
     comments = Comment.objects.filter(product_id=id)
-    return render(request,'shop/detail.html',{'product':product,'comments':comments,'positive': positive,})
+    related = Product.objects.filter(category_id=product.category_id).exclude(id=product.id)
+    return render(request,'shop/detail.html',{'product':product,'comments':comments,'positive': positive,'related':related})
 
 
 
@@ -144,3 +163,4 @@ def delete_product(request, pk):
         product.delete()
         return redirect('home')
     return render(request, 'shop/delete_product.html', {'product': product})
+
