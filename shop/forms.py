@@ -1,18 +1,19 @@
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 
-from shop.models import Product
+from shop.models import Product, Comment,Order
 
 
-class OrderForm(forms.Form):
-    name = forms.CharField()
-    phone_number = PhoneNumberField(region="UZ")
-    quantity = forms.IntegerField()
 
-class CommentForm(forms.Form):
-    name = forms.CharField()
-    email = forms.EmailField()
-    comment = forms.CharField(widget=forms.Textarea)
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['name', 'phone_number', 'quantity']
+
+class CommentForm(forms.ModelForm):
+     class Meta:
+        model = Comment
+        fields = '__all__'
 
 class ProductModelForm(forms.ModelForm):
     class Meta:

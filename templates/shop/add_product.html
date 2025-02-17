@@ -44,11 +44,7 @@
 <div class="header">
     <h1 class="text">Mahsulot {{ action }}</h1>
     <hr>
-{% if action == "O'zgartirish" %}
-   <form class="form" method="post" enctype="multipart/form-data" action="{% url 'edit_product' product.id %}">
-{% else %}
        <form class="form" method="post" enctype="multipart/form-data" action="{% url 'add_product' %}">
-{% endif %}
     {{ form.as_p }}
     {% csrf_token %}
     <button type="submit" class="button">{{ action }}</button>

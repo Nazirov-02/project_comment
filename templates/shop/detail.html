@@ -24,7 +24,8 @@
                         </div>
                         <p class="lead">{{ product.description }}</p>
                         <div class="d-flex">
-                            <form method="get" action="{% url 'order_detail' product.id %}">
+                            <form method="post" action="{% url 'order_detail' product.id %}">
+                                {% csrf_token %}
                                 <div class="form-group">
                                     <h2>Buyurtma berish</h2>
                                 </div>
@@ -70,14 +71,12 @@
                     </div>
                     {% if comments %}
                      {% for comment in comments %}
-                      {% if comment.is_negative is False %}
-                      <div class="media card p-4 mt-2">
-                        <div class="media-body">
+                        <div class="media card p-4 mt-2">
+                          <div class="media-body">
                           <h3 class="mt-0">{{ comment.name }}</h3>
                             {{ comment.comment }}
+                           </div>
                         </div>
-                      </div>
-                         {% endif %}
                      {% endfor %}
                     {% else %}
                         <h3 class="mt-0">Hali sharxlar mavjud emas</h3>
@@ -89,7 +88,8 @@
                             <h3>Sharx qo'shish</h3>
                         </div>
 
-                    <form method="get" action="{% url 'comment_detail' product.id %}">
+                    <form method="post" action="{% url 'comment_detail' product.id %}">
+                        {% csrf_token %}
                         <div class="form-group mb-3">
                           <label for="formGroupExampleInput">Ismingiz</label>
                           <input type="text" name="name" class="form-control"  placeholder="Ismingiz">
